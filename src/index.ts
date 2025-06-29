@@ -203,7 +203,7 @@ app.post("/discord", async (c) => {
           `• Use \`/summarize <youtube-url>\` to get a video summary\n` +
           `• Works with any YouTube URL format\n` +
           `• Powered by advanced AI for intelligent analysis\n\n` +
-          `🏠 **Homepage**: https://github.com/Sp4Rx/yt-summarizer-bot\n\n` +
+          `🏠 **Homepage**: https://github.com/Sp4Rx/sumtube\n\n` +
           `✨ **Commands**:\n` +
           `• \`/about\` - Show this information\n` +
           `• \`/summarize <url>\` - Summarize a YouTube video`;

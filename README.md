@@ -119,6 +119,12 @@ npm run cf-typegen
 
 This bot is designed to run on Cloudflare Workers:
 
+### One-Click Deploy
+
+[![Deploy to Cloudflare Workers](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/Sp4Rx/sumtube)
+
+### Manual Deploy
+
 ```bash
 # Deploy to production
 npm run deploy
