@@ -18,6 +18,125 @@
 			min-height: 100vh;
 			color: #333;
 			position: relative;
+			overflow-x: hidden;
+		}
+
+		/* Animated background elements */
+		.bg-animation {
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			pointer-events: none;
+			z-index: -1;
+		}
+
+		.floating-shape {
+			position: absolute;
+			background: rgba(255, 255, 255, 0.1);
+			border-radius: 50%;
+			animation: float 6s ease-in-out infinite;
+		}
+
+		.floating-shape:nth-child(1) {
+			width: 80px;
+			height: 80px;
+			top: 20%;
+			left: 10%;
+			animation-delay: 0s;
+		}
+
+		.floating-shape:nth-child(2) {
+			width: 120px;
+			height: 120px;
+			top: 60%;
+			left: 80%;
+			animation-delay: 2s;
+		}
+
+		.floating-shape:nth-child(3) {
+			width: 60px;
+			height: 60px;
+			top: 80%;
+			left: 20%;
+			animation-delay: 4s;
+		}
+
+		.floating-shape:nth-child(4) {
+			width: 100px;
+			height: 100px;
+			top: 10%;
+			left: 70%;
+			animation-delay: 1s;
+		}
+
+		.floating-shape:nth-child(5) {
+			width: 90px;
+			height: 90px;
+			top: 40%;
+			left: 5%;
+			animation-delay: 3s;
+		}
+
+		.floating-shape:nth-child(6) {
+			width: 70px;
+			height: 70px;
+			top: 70%;
+			left: 60%;
+			animation-delay: 5s;
+		}
+
+		@keyframes float {
+
+			0%,
+			100% {
+				transform: translateY(0px) rotate(0deg);
+				opacity: 0.7;
+			}
+
+			33% {
+				transform: translateY(-20px) rotate(120deg);
+				opacity: 0.4;
+			}
+
+			66% {
+				transform: translateY(10px) rotate(240deg);
+				opacity: 0.8;
+			}
+		}
+
+		/* Gradient overlay animation */
+		.gradient-overlay {
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background: linear-gradient(45deg,
+					rgba(102, 126, 234, 0.1) 0%,
+					rgba(118, 75, 162, 0.1) 25%,
+					rgba(102, 126, 234, 0.1) 50%,
+					rgba(118, 75, 162, 0.1) 75%,
+					rgba(102, 126, 234, 0.1) 100%);
+			background-size: 400% 400%;
+			animation: gradientShift 8s ease infinite;
+			pointer-events: none;
+			z-index: -1;
+		}
+
+		@keyframes gradientShift {
+			0% {
+				background-position: 0% 50%;
+			}
+
+			50% {
+				background-position: 100% 50%;
+			}
+
+			100% {
+				background-position: 0% 50%;
+			}
 		}
 
 		.github-corner {
@@ -67,7 +186,7 @@
 		.main-btn {
 			display: inline-flex;
 			align-items: center;
-			background: #5865f2;
+			background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
 			color: white;
 			padding: 1.5rem 3rem;
 			text-decoration: none;
@@ -76,14 +195,67 @@
 			font-size: 1.2rem;
 			transition: all 0.3s ease;
 			gap: 0.8rem;
-			box-shadow: 0 8px 25px rgba(88, 101, 242, 0.3);
+			box-shadow:
+				0 8px 25px rgba(255, 107, 107, 0.4),
+				0 0 20px rgba(255, 107, 107, 0.5),
+				inset 0 1px 0 rgba(255, 255, 255, 0.3);
 			transform: translateY(0);
+			position: relative;
+			overflow: hidden;
+			border: 2px solid rgba(255, 255, 255, 0.2);
+		}
+
+		.main-btn::before {
+			content: '';
+			position: absolute;
+			top: 0;
+			left: -100%;
+			width: 100%;
+			height: 100%;
+			background: linear-gradient(90deg,
+					transparent,
+					rgba(255, 255, 255, 0.2),
+					transparent);
+			transition: left 0.6s ease;
 		}
 
 		.main-btn:hover {
-			background: #4752c4;
+			background: linear-gradient(135deg, #ff5252 0%, #d63031 100%);
 			transform: translateY(-3px);
-			box-shadow: 0 12px 35px rgba(88, 101, 242, 0.4);
+			box-shadow:
+				0 12px 35px rgba(255, 107, 107, 0.5),
+				0 0 30px rgba(255, 107, 107, 0.7),
+				0 0 50px rgba(255, 107, 107, 0.4),
+				inset 0 1px 0 rgba(255, 255, 255, 0.4);
+			border-color: rgba(255, 255, 255, 0.4);
+		}
+
+		.main-btn:hover::before {
+			left: 100%;
+		}
+
+		/* Pulsing glow animation */
+		@keyframes pulse-glow {
+
+			0%,
+			100% {
+				box-shadow:
+					0 8px 25px rgba(255, 107, 107, 0.4),
+					0 0 20px rgba(255, 107, 107, 0.5),
+					inset 0 1px 0 rgba(255, 255, 255, 0.3);
+			}
+
+			50% {
+				box-shadow:
+					0 8px 25px rgba(255, 107, 107, 0.5),
+					0 0 25px rgba(255, 107, 107, 0.6),
+					0 0 40px rgba(255, 107, 107, 0.3),
+					inset 0 1px 0 rgba(255, 255, 255, 0.3);
+			}
+		}
+
+		.main-btn {
+			animation: pulse-glow 3s ease-in-out infinite;
 		}
 
 		.main-btn .icon {
@@ -125,47 +297,6 @@
 		.feature p {
 			color: #666;
 			line-height: 1.6;
-		}
-
-		.secondary-buttons {
-			display: flex;
-			justify-content: center;
-			gap: 1rem;
-			margin-top: 2rem;
-			flex-wrap: wrap;
-		}
-
-		.btn {
-			display: inline-flex;
-			align-items: center;
-			background: #667eea;
-			color: white;
-			padding: 0.8rem 1.5rem;
-			text-decoration: none;
-			border-radius: 8px;
-			font-weight: 600;
-			transition: all 0.3s ease;
-			gap: 0.5rem;
-			font-size: 0.95rem;
-		}
-
-		.btn:hover {
-			transform: translateY(-2px);
-			box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-		}
-
-		.btn.cloudflare {
-			background: #f38020;
-		}
-
-		.btn.cloudflare:hover {
-			background: #e0720a;
-		}
-
-		.icon {
-			width: 18px;
-			height: 18px;
-			fill: currentColor;
 		}
 
 		.code {
@@ -230,11 +361,6 @@
 				font-size: 1.1rem;
 			}
 
-			.secondary-buttons {
-				flex-direction: column;
-				align-items: center;
-			}
-
 			.github-corner img {
 				width: 120px;
 				height: 120px;
@@ -244,6 +370,17 @@
 </head>
 
 <body>
+	<!-- Animated Background -->
+	<div class="bg-animation">
+		<div class="floating-shape"></div>
+		<div class="floating-shape"></div>
+		<div class="floating-shape"></div>
+		<div class="floating-shape"></div>
+		<div class="floating-shape"></div>
+		<div class="floating-shape"></div>
+	</div>
+	<div class="gradient-overlay"></div>
+
 	<!-- GitHub Fork Ribbon -->
 	<a href="https://github.com/Sp4Rx/sumtube" class="github-corner" target="_blank">
 		<img decoding="async" width="149" height="149"
@@ -272,21 +409,20 @@
 			<div class="features">
 				<div class="feature">
 					<div class="feature-icon">🤖</div>
-					<h3>Slash Commands</h3>
-					<p>Easy-to-use slash commands for instant YouTube video summaries using advanced AI technology.
-					</p>
+					<h3>AI-Powered Summaries</h3>
+					<p>Get intelligent summaries of any YouTube video using advanced AI technology.</p>
 				</div>
 
 				<div class="feature">
 					<div class="feature-icon">⚡</div>
 					<h3>Lightning Fast</h3>
-					<p>Get video summaries in seconds with powerful AI processing and global edge computing.</p>
+					<p>Receive video summaries in seconds, right in your Discord server.</p>
 				</div>
 
 				<div class="feature">
 					<div class="feature-icon">🔗</div>
-					<h3>Universal Support</h3>
-					<p>Works with all YouTube URL formats - youtube.com, youtu.be, mobile links, and more.</p>
+					<h3>Works with Any YouTube Link</h3>
+					<p>Supports all YouTube URL formats - youtube.com, youtu.be, and more.</p>
 				</div>
 			</div>
 		</div>
@@ -297,17 +433,17 @@
 
 			<div class="steps">
 				<div class="step">
-					<h4>Add Bot to Server</h4>
+					<h4>Add Bot to Your Server</h4>
 					<p>Click the "Add Bot to Discord" button above and authorize the bot for your server.</p>
 				</div>
 
 				<div class="step">
-					<h4>Use Slash Command</h4>
+					<h4>Use the Slash Command</h4>
 					<p>Type <code>/summarize</code> followed by any YouTube URL in any channel.</p>
 				</div>
 
 				<div class="step">
-					<h4>Get Instant Summaries</h4>
+					<h4>Get Your Summary</h4>
 					<p>The bot will analyze the video and reply with an AI-powered summary!</p>
 				</div>
 			</div>
@@ -323,68 +459,6 @@
 				<code>/about</code> - Learn about the bot |
 				<code>/summarize &lt;url&gt;</code> - Summarize a YouTube video
 			</p>
-		</div>
-
-		<div class="card">
-			<h2>⚙️ Self-Hosting</h2>
-			<p style="margin-bottom: 2rem; color: #666; font-size: 1.1rem;">Want to host your own instance? Choose your
-				preferred method:</p>
-
-			<div class="secondary-buttons">
-				<a href="https://deploy.workers.cloudflare.com/?url=https://github.com/Sp4Rx/sumtube"
-					class="btn cloudflare" target="_blank">
-					<svg class="icon" viewBox="0 0 24 24">
-						<path
-							d="M20.5 12.5c0-4.418-3.582-8-8-8s-8 3.582-8 8c0 .418.032.826.093 1.225l1.653-.413c-.046-.269-.071-.546-.071-.825 0-3.314 2.686-6 6-6s6 2.686 6 6-2.686 6-6 6c-.279 0-.556-.025-.825-.071l-.413 1.653c.399.061.807.093 1.225.093 4.418 0 8-3.582 8-8zm-8-4c-2.209 0-4 1.791-4 4s1.791 4 4 4 4-1.791 4-4-1.791-4-4-4zm0 6c-1.105 0-2-.895-2-2s.895-2 2-2 2 .895 2 2-.895 2-2 2z" />
-					</svg>
-					Deploy to Cloudflare
-				</a>
-			</div>
-
-			<h3 style="margin: 2rem 0 1rem 0; color: #667eea;">📋 Manual Setup Steps</h3>
-
-			<div class="steps">
-				<div class="step">
-					<h4>Clone Repository</h4>
-					<p>Get the source code from GitHub</p>
-					<div class="code">git clone https://github.com/Sp4Rx/sumtube.git
-						cd sumtube</div>
-				</div>
-
-				<div class="step">
-					<h4>Install Dependencies</h4>
-					<p>Install required Node.js packages</p>
-					<div class="code">npm install</div>
-				</div>
-
-				<div class="step">
-					<h4>Configure Environment</h4>
-					<p>Set up your Discord and Gemini API credentials</p>
-					<div class="code">wrangler secret put DISCORD_TOKEN
-						wrangler secret put DISCORD_PUBLIC_KEY
-						wrangler secret put DISCORD_APPLICATION_ID
-						wrangler secret put GEMINI_API_KEY</div>
-				</div>
-
-				<div class="step">
-					<h4>Deploy to Cloudflare</h4>
-					<p>Deploy your bot to Cloudflare Workers</p>
-					<div class="code">npm run deploy</div>
-				</div>
-			</div>
-		</div>
-
-		<div class="card">
-			<h2>🔧 Features</h2>
-			<ul style="margin: 1rem 0; padding-left: 2rem; line-height: 1.8; color: #666;">
-				<li><strong>Slash Commands:</strong> Simple <code>/summarize</code> command for easy video analysis!
-				</li>
-				<li><strong>AI-Powered Summaries:</strong> Uses advanced AI for intelligent video analysis</li>
-				<li><strong>Multiple URL Formats:</strong> Supports all YouTube URL variations</li>
-				<li><strong>Global Performance:</strong> Hosted on Cloudflare Workers for worldwide speed</li>
-				<li><strong>Open Source:</strong> MIT licensed and community-driven development</li>
-				<li><strong>Easy Setup:</strong> One-click deployment or manual installation</li>
-			</ul>
 		</div>
 	</div>
 </body>
