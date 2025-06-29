@@ -107,6 +107,8 @@ app.get("/id", async (c) => {
   return c.text(c.env.DISCORD_APPLICATION_ID || 'DISCORD_APPLICATION_ID not set');
 });
 
+
+
 /**
  * Check if message contains YouTube links
  */
@@ -237,7 +239,7 @@ app.post("/discord", async (c) => {
           // Process the summary in the background and edit the response
           c.executionCtx.waitUntil((async () => {
             try {
-              const summary = await summarizeWithGemini(videoUrl, env);
+              const summary = await summarizeWithGemini(videoUrl, videoId, env);
 
               // Edit the deferred response with the actual summary
               await fetch(`https://discord.com/api/v10/webhooks/${env.DISCORD_APPLICATION_ID}/${interaction.token}/messages/@original`, {
