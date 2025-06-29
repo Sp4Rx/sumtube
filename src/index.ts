@@ -9,7 +9,7 @@ import {
   verifyKey,
 } from "discord-interactions";
 import { ABOUT_COMMAND, SUMMARIZE_COMMAND } from "./commands";
-import { summarizeWithGemini } from "./gemini";
+import { summarizeWithGemini, model } from "./gemini";
 
 interface DiscordInteraction {
   type: number;
@@ -163,21 +163,37 @@ app.post("/discord", async (c) => {
   const env = c.env;
   const body = await c.req.text();
 
+  console.log('🔔 Discord interaction received');
+  console.log('📊 Request headers:', {
+    'x-signature-ed25519': c.req.header('x-signature-ed25519') ? '[PRESENT]' : '[MISSING]',
+    'x-signature-timestamp': c.req.header('x-signature-timestamp') ? '[PRESENT]' : '[MISSING]',
+    'content-type': c.req.header('content-type'),
+    'user-agent': c.req.header('user-agent')
+  });
+
   // Verify Discord interaction signature
   const { isValid, interaction } = await verifyDiscordRequest(c.req.raw, body, env);
-  console.log('#### Interaction:', isValid, interaction);
+  console.log('🔐 Signature validation:', isValid ? '✅ VALID' : '❌ INVALID');
+  console.log('📋 Interaction details:', {
+    type: interaction?.type,
+    data: interaction?.data,
+    token: interaction?.token ? '[PRESENT]' : '[MISSING]'
+  });
 
   if (!isValid || !interaction) {
+    console.error('❌ Invalid signature or missing interaction data');
     return c.text('Bad request signature.', 401);
   }
 
   if (interaction.type === InteractionType.PING) {
+    console.log('🏓 PING interaction - responding with PONG');
     return c.json({
       type: InteractionResponseType.PONG,
     });
   }
 
   if (interaction.type === InteractionType.APPLICATION_COMMAND) {
+    console.log(`⚡ Application command received: ${interaction.data?.name}`);
     switch (interaction.data?.name.toLowerCase()) {
       case ABOUT_COMMAND.name.toLowerCase(): {
         const aboutMessage =
@@ -200,9 +216,12 @@ app.post("/discord", async (c) => {
         });
       }
       case SUMMARIZE_COMMAND.name.toLowerCase(): {
+        console.log('🎯 /summarize command received');
+
         const urlOption = interaction.data?.options?.find(option => option.name === 'url');
 
         if (!urlOption?.value) {
+          console.log('❌ No URL provided in /summarize command');
           return c.json({
             type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
             data: {
@@ -212,9 +231,11 @@ app.post("/discord", async (c) => {
         }
 
         const url = urlOption.value;
+        console.log(`📺 Processing YouTube URL: ${url}`);
 
         // Check if it's a valid YouTube URL
         if (!containsYouTubeLink(url)) {
+          console.log('❌ Invalid YouTube URL format detected');
           return c.json({
             type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
             data: {
@@ -229,6 +250,9 @@ app.post("/discord", async (c) => {
           const videoId = youtubeLinks[0].videoId;
           const videoUrl = `https://www.youtube.com/watch?v=${videoId}`;
 
+          console.log(`✅ Extracted video ID: ${videoId}`);
+          console.log(`🔄 Sending deferred response to Discord...`);
+
           // Send deferred response immediately (tells Discord we're processing)
           // This gives us up to 15 minutes to respond
           // Type 5 = DEFERRED_CHANNEL_MESSAGE_WITH_SOURCE
@@ -239,21 +263,48 @@ app.post("/discord", async (c) => {
           // Process the summary in the background and edit the response
           c.executionCtx.waitUntil((async () => {
             try {
+              console.log('🚀 Starting background processing for video summary...');
               const summary = await summarizeWithGemini(videoUrl, videoId, env);
 
+              console.log('🔍 Summary:');
+              console.log(summary);
+              console.log('📤 Sending summary response to Discord...');
               // Edit the deferred response with the actual summary
-              await fetch(`https://discord.com/api/v10/webhooks/${env.DISCORD_APPLICATION_ID}/${interaction.token}/messages/@original`, {
+              const editResponse = await fetch(`https://discord.com/api/v10/webhooks/${env.DISCORD_APPLICATION_ID}/${interaction.token}/messages/@original`, {
                 method: 'PATCH',
                 headers: {
                   'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                  content: `🎥 **YouTube Video Summary**\n\n📹 **Video:** ${url}\n\n${summary}\n\n✨ *Powered by Gemini 2.5 Flash*`,
+                  content: `**YouTube Video Summary**\n\n🎬 **Video:** ${url}\n\n${summary}\n\n✨ *Powered by ${model}*`,
                 }),
               });
-            } catch (error) {
-              console.error('Error processing summary:', error);
 
+              if (editResponse.ok) {
+                console.log('✅ Successfully sent summary to Discord');
+              } else {
+                console.error('❌ Failed to edit Discord message:', editResponse.status, editResponse.statusText);
+                const errorText = await editResponse.text();
+                console.error('Discord API error details:', errorText);
+                //format the error text as per discord markdown
+                try {
+                  await fetch(`https://discord.com/api/v10/webhooks/${env.DISCORD_APPLICATION_ID}/${interaction.token}/messages/@original`, {
+                    method: 'PATCH',
+                    headers: {
+                      'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                      content: `❌ Sorry, I couldn't summarize this video.\n \`\`\`${errorText}\`\`\``,
+                    }),
+                  });
+                } catch (error) {
+                  console.error('❌ Failed to edit Discord message with the error message:', error);
+                }
+              }
+            } catch (error) {
+              console.error('❌ Error processing summary:', error);
+
+              console.log('📤 Sending error message to Discord...');
               // Edit with error message
               await fetch(`https://discord.com/api/v10/webhooks/${env.DISCORD_APPLICATION_ID}/${interaction.token}/messages/@original`, {
                 method: 'PATCH',
@@ -270,6 +321,7 @@ app.post("/discord", async (c) => {
           return deferredResponse;
         }
 
+        console.log('❌ Could not extract video ID from URL');
         return c.json({
           type: InteractionResponseType.CHANNEL_MESSAGE_WITH_SOURCE,
           data: {
