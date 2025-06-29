@@ -1,14 +1,17 @@
 {
-	"name": "sumtube",
-	"scripts": {
-		"dev": "wrangler dev",
-		"deploy": "wrangler deploy --minify",
-		"cf-typegen": "wrangler types --env-interface CloudflareBindings"
-	},
-	"dependencies": {
-		"hono": "^4.8.3"
-	},
-	"devDependencies": {
-		"wrangler": "^4.22.0"
-	}
+  "name": "sumtube",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy --minify",
+    "cf-typegen": "wrangler types --env-interface CloudflareBindings",
+    "register": "curl -X POST http://localhost:8787/register",
+    "cf-tunnel": "cloudflared tunnel --url http://localhost:8787"
+  },
+  "dependencies": {
+    "hono": "^4.8.3",
+    "discord-interactions": "^3.4.0"
+  },
+  "devDependencies": {
+    "wrangler": "^4.22.0"
+  }
 }

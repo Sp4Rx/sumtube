@@ -1,19 +1,392 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Hello, World!</title>
-	</head>
-	<body>
-		<h1 id="heading"></h1>
-		<script>
-			fetch('/message')
-				.then((resp) => resp.text())
-				.then((text) => {
-					const h1 = document.getElementById('heading');
-					h1.textContent = text;
-				});
-		</script>
-	</body>
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Discord YouTube Summarizer Bot</title>
+	<style>
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+		}
+
+		body {
+			font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+			background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+			min-height: 100vh;
+			color: #333;
+			position: relative;
+		}
+
+		.github-corner {
+			position: fixed;
+			top: 0;
+			right: 0;
+			z-index: 1000;
+		}
+
+		.github-corner img {
+			position: absolute;
+			top: 0;
+			right: 0;
+			border: 0;
+			width: 149px;
+			height: 149px;
+		}
+
+		.container {
+			max-width: 1200px;
+			margin: 0 auto;
+			padding: 2rem;
+		}
+
+		.header {
+			text-align: center;
+			margin-bottom: 3rem;
+			color: white;
+		}
+
+		.header h1 {
+			font-size: 3.5rem;
+			margin-bottom: 1rem;
+			text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+		}
+
+		.header p {
+			font-size: 1.3rem;
+			opacity: 0.9;
+			margin-bottom: 2rem;
+		}
+
+		.main-cta {
+			margin-bottom: 3rem;
+		}
+
+		.main-btn {
+			display: inline-flex;
+			align-items: center;
+			background: #5865f2;
+			color: white;
+			padding: 1.5rem 3rem;
+			text-decoration: none;
+			border-radius: 12px;
+			font-weight: bold;
+			font-size: 1.2rem;
+			transition: all 0.3s ease;
+			gap: 0.8rem;
+			box-shadow: 0 8px 25px rgba(88, 101, 242, 0.3);
+			transform: translateY(0);
+		}
+
+		.main-btn:hover {
+			background: #4752c4;
+			transform: translateY(-3px);
+			box-shadow: 0 12px 35px rgba(88, 101, 242, 0.4);
+		}
+
+		.main-btn .icon {
+			width: 24px;
+			height: 24px;
+			fill: currentColor;
+		}
+
+		.card {
+			background: white;
+			border-radius: 15px;
+			padding: 2rem;
+			box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+			margin-bottom: 2rem;
+		}
+
+		.features {
+			display: grid;
+			grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+			gap: 2rem;
+		}
+
+		.feature {
+			text-align: center;
+			padding: 1.5rem;
+		}
+
+		.feature-icon {
+			font-size: 3rem;
+			margin-bottom: 1rem;
+		}
+
+		.feature h3 {
+			color: #667eea;
+			margin-bottom: 1rem;
+			font-size: 1.3rem;
+		}
+
+		.feature p {
+			color: #666;
+			line-height: 1.6;
+		}
+
+		.secondary-buttons {
+			display: flex;
+			justify-content: center;
+			gap: 1rem;
+			margin-top: 2rem;
+			flex-wrap: wrap;
+		}
+
+		.btn {
+			display: inline-flex;
+			align-items: center;
+			background: #667eea;
+			color: white;
+			padding: 0.8rem 1.5rem;
+			text-decoration: none;
+			border-radius: 8px;
+			font-weight: 600;
+			transition: all 0.3s ease;
+			gap: 0.5rem;
+			font-size: 0.95rem;
+		}
+
+		.btn:hover {
+			transform: translateY(-2px);
+			box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+		}
+
+		.btn.cloudflare {
+			background: #f38020;
+		}
+
+		.btn.cloudflare:hover {
+			background: #e0720a;
+		}
+
+		.icon {
+			width: 18px;
+			height: 18px;
+			fill: currentColor;
+		}
+
+		.code {
+			background: #f8f9fa;
+			padding: 1.5rem;
+			border-radius: 10px;
+			font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+			margin: 1.5rem 0;
+			border-left: 4px solid #667eea;
+			overflow-x: auto;
+			font-size: 0.9rem;
+			line-height: 1.6;
+		}
+
+		.steps {
+			counter-reset: step-counter;
+		}
+
+		.step {
+			counter-increment: step-counter;
+			margin-bottom: 2rem;
+			padding-left: 3rem;
+			position: relative;
+		}
+
+		.step::before {
+			content: counter(step-counter);
+			position: absolute;
+			left: 0;
+			top: 0;
+			background: #667eea;
+			color: white;
+			width: 2rem;
+			height: 2rem;
+			border-radius: 50%;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			font-weight: bold;
+			font-size: 0.9rem;
+		}
+
+		.step h4 {
+			color: #667eea;
+			margin-bottom: 0.5rem;
+			font-size: 1.1rem;
+		}
+
+		.step p {
+			color: #666;
+			line-height: 1.6;
+			margin-bottom: 0.5rem;
+		}
+
+		@media (max-width: 768px) {
+			.header h1 {
+				font-size: 2.5rem;
+			}
+
+			.main-btn {
+				padding: 1.2rem 2rem;
+				font-size: 1.1rem;
+			}
+
+			.secondary-buttons {
+				flex-direction: column;
+				align-items: center;
+			}
+
+			.github-corner img {
+				width: 120px;
+				height: 120px;
+			}
+		}
+	</style>
+</head>
+
+<body>
+	<!-- GitHub Fork Ribbon -->
+	<a href="https://github.com/Sp4Rx/yt-summarizer-bot" class="github-corner" target="_blank">
+		<img decoding="async" width="149" height="149"
+			src="https://github.blog/wp-content/uploads/2008/12/forkme_right_darkblue_121621.png"
+			alt="Fork me on GitHub" loading="lazy">
+	</a>
+
+	<div class="container">
+		<div class="header">
+			<h1>📺 YouTube Summarizer Bot</h1>
+			<p>Automatically summarize YouTube videos in Discord with AI</p>
+
+			<div class="main-cta">
+				<a href="https://discord.com/oauth2/authorize?client_id=1388543377351508009&permissions=2147551232&scope=bot%20applications.commands"
+					class="main-btn" target="_blank">
+					<svg class="icon" viewBox="0 0 24 24">
+						<path
+							d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 2.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-2.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z" />
+					</svg>
+					🚀 Add Bot to Discord
+				</a>
+			</div>
+		</div>
+
+		<div class="card">
+			<div class="features">
+				<div class="feature">
+					<div class="feature-icon">🤖</div>
+					<h3>Slash Commands</h3>
+					<p>Easy-to-use slash commands for instant YouTube video summaries using advanced AI technology.
+					</p>
+				</div>
+
+				<div class="feature">
+					<div class="feature-icon">⚡</div>
+					<h3>Lightning Fast</h3>
+					<p>Get video summaries in seconds with powerful AI processing and global edge computing.</p>
+				</div>
+
+				<div class="feature">
+					<div class="feature-icon">🔗</div>
+					<h3>Universal Support</h3>
+					<p>Works with all YouTube URL formats - youtube.com, youtu.be, mobile links, and more.</p>
+				</div>
+			</div>
+		</div>
+
+		<div class="card">
+			<h2>📋 How to Use</h2>
+			<p style="margin-bottom: 1.5rem; color: #666; font-size: 1.1rem;">Getting started is incredibly simple:</p>
+
+			<div class="steps">
+				<div class="step">
+					<h4>Add Bot to Server</h4>
+					<p>Click the "Add Bot to Discord" button above and authorize the bot for your server.</p>
+				</div>
+
+				<div class="step">
+					<h4>Use Slash Command</h4>
+					<p>Type <code>/summarize</code> followed by any YouTube URL in any channel.</p>
+				</div>
+
+				<div class="step">
+					<h4>Get Instant Summaries</h4>
+					<p>The bot will analyze the video and reply with an AI-powered summary!</p>
+				</div>
+			</div>
+
+			<div class="code">
+				# Example: Use the slash command with any YouTube URL
+				/summarize https://www.youtube.com/watch?v=dQw4w9WgXcQ
+
+				# The bot will reply with an AI-powered summary! ✨
+			</div>
+
+			<p style="margin-top: 1rem; color: #666;"><strong>Available Commands:</strong>
+				<code>/about</code> - Learn about the bot |
+				<code>/summarize &lt;url&gt;</code> - Summarize a YouTube video
+			</p>
+		</div>
+
+		<div class="card">
+			<h2>⚙️ Self-Hosting</h2>
+			<p style="margin-bottom: 2rem; color: #666; font-size: 1.1rem;">Want to host your own instance? Choose your
+				preferred method:</p>
+
+			<div class="secondary-buttons">
+				<a href="https://deploy.workers.cloudflare.com/?url=https://github.com/Sp4Rx/yt-summarizer-bot"
+					class="btn cloudflare" target="_blank">
+					<svg class="icon" viewBox="0 0 24 24">
+						<path
+							d="M20.5 12.5c0-4.418-3.582-8-8-8s-8 3.582-8 8c0 .418.032.826.093 1.225l1.653-.413c-.046-.269-.071-.546-.071-.825 0-3.314 2.686-6 6-6s6 2.686 6 6-2.686 6-6 6c-.279 0-.556-.025-.825-.071l-.413 1.653c.399.061.807.093 1.225.093 4.418 0 8-3.582 8-8zm-8-4c-2.209 0-4 1.791-4 4s1.791 4 4 4 4-1.791 4-4-1.791-4-4-4zm0 6c-1.105 0-2-.895-2-2s.895-2 2-2 2 .895 2 2-.895 2-2 2z" />
+					</svg>
+					Deploy to Cloudflare
+				</a>
+			</div>
+
+			<h3 style="margin: 2rem 0 1rem 0; color: #667eea;">📋 Manual Setup Steps</h3>
+
+			<div class="steps">
+				<div class="step">
+					<h4>Clone Repository</h4>
+					<p>Get the source code from GitHub</p>
+					<div class="code">git clone https://github.com/Sp4Rx/yt-summarizer-bot.git
+						cd yt-summarizer-bot</div>
+				</div>
+
+				<div class="step">
+					<h4>Install Dependencies</h4>
+					<p>Install required Node.js packages</p>
+					<div class="code">npm install</div>
+				</div>
+
+				<div class="step">
+					<h4>Configure Environment</h4>
+					<p>Set up your Discord and Gemini API credentials</p>
+					<div class="code">wrangler secret put DISCORD_TOKEN
+						wrangler secret put DISCORD_PUBLIC_KEY
+						wrangler secret put DISCORD_APPLICATION_ID
+						wrangler secret put GEMINI_API_KEY</div>
+				</div>
+
+				<div class="step">
+					<h4>Deploy to Cloudflare</h4>
+					<p>Deploy your bot to Cloudflare Workers</p>
+					<div class="code">npm run deploy</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="card">
+			<h2>🔧 Features</h2>
+			<ul style="margin: 1rem 0; padding-left: 2rem; line-height: 1.8; color: #666;">
+				<li><strong>Slash Commands:</strong> Simple <code>/summarize</code> command for easy video analysis!
+				</li>
+				<li><strong>AI-Powered Summaries:</strong> Uses advanced AI for intelligent video analysis</li>
+				<li><strong>Multiple URL Formats:</strong> Supports all YouTube URL variations</li>
+				<li><strong>Global Performance:</strong> Hosted on Cloudflare Workers for worldwide speed</li>
+				<li><strong>Open Source:</strong> MIT licensed and community-driven development</li>
+				<li><strong>Easy Setup:</strong> One-click deployment or manual installation</li>
+			</ul>
+		</div>
+	</div>
+</body>
+
 </html>
