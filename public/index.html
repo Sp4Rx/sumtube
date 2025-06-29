@@ -4,7 +4,98 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Discord YouTube Summarizer Bot</title>
+	<title>SumTube - Discord YouTube Summarizer Bot | AI-Powered Video Summaries</title>
+
+	<!-- Favicon -->
+	<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+	<link rel="icon" type="image/png" sizes="32x32" href="/favicon.svg">
+	<link rel="icon" type="image/png" sizes="16x16" href="/favicon.svg">
+	<link rel="apple-touch-icon" href="/logo.svg">
+
+	<!-- SEO Meta Tags -->
+	<meta name="description"
+		content="SumTube is an AI-powered Discord bot that automatically summarizes YouTube videos. Get instant, intelligent video summaries with timestamps using advanced AI technology.">
+	<meta name="keywords"
+		content="Discord bot, YouTube summarizer, AI video summary, Discord YouTube bot, video analysis, AI bot, YouTube automation, video summaries, Discord tools">
+	<meta name="author" content="SumTube">
+	<meta name="robots" content="index, follow">
+	<link rel="canonical" href="https://sumtube.heysuvajit.workers.dev/">
+
+	<!-- Open Graph / Facebook -->
+	<meta property="og:type" content="website">
+	<meta property="og:url" content="https://sumtube.heysuvajit.workers.dev/">
+	<meta property="og:title" content="SumTube - Discord YouTube Summarizer Bot | AI-Powered Video Summaries">
+	<meta property="og:description"
+		content="SumTube is an AI-powered Discord bot that automatically summarizes YouTube videos. Get instant, intelligent video summaries with timestamps using advanced AI technology.">
+	<meta property="og:image" content="https://sumtube.heysuvajit.workers.dev/logo.svg">
+	<meta property="og:image:width" content="200">
+	<meta property="og:image:height" content="200">
+	<meta property="og:image:alt" content="SumTube Discord Bot Logo">
+	<meta property="og:site_name" content="SumTube">
+	<meta property="og:locale" content="en_US">
+
+	<!-- Twitter Card -->
+	<meta name="twitter:card" content="summary_large_image">
+	<meta name="twitter:url" content="https://sumtube.heysuvajit.workers.dev/">
+	<meta name="twitter:title" content="SumTube - Discord YouTube Summarizer Bot | AI-Powered Video Summaries">
+	<meta name="twitter:description"
+		content="SumTube is an AI-powered Discord bot that automatically summarizes YouTube videos. Get instant, intelligent video summaries with timestamps using advanced AI technology.">
+	<meta name="twitter:image" content="https://sumtube.heysuvajit.workers.dev/logo.svg">
+	<meta name="twitter:image:alt" content="SumTube Discord Bot Logo">
+	<meta name="twitter:creator" content="@SumTubeBot">
+	<meta name="twitter:site" content="@SumTubeBot">
+
+	<!-- LinkedIn -->
+	<meta property="linkedin:title" content="SumTube - Discord YouTube Summarizer Bot | AI-Powered Video Summaries">
+	<meta property="linkedin:description"
+		content="SumTube is an AI-powered Discord bot that automatically summarizes YouTube videos. Get instant, intelligent video summaries with timestamps using advanced AI technology.">
+	<meta property="linkedin:image" content="https://sumtube.heysuvajit.workers.dev/logo.svg">
+	<meta property="linkedin:url" content="https://sumtube.heysuvajit.workers.dev/">
+
+	<!-- Discord Embed -->
+	<meta name="theme-color" content="#667eea">
+	<meta property="discord:title" content="SumTube - AI YouTube Summarizer Bot">
+	<meta property="discord:description" content="Get instant AI-powered summaries of YouTube videos in Discord! 🤖✨">
+	<meta property="discord:image" content="https://sumtube.heysuvajit.workers.dev/logo.svg">
+
+	<!-- Slack -->
+	<meta property="slack:title" content="SumTube - Discord YouTube Summarizer Bot">
+	<meta property="slack:description"
+		content="SumTube is an AI-powered Discord bot that automatically summarizes YouTube videos. Get instant, intelligent video summaries with timestamps using advanced AI technology.">
+	<meta property="slack:image" content="https://sumtube.heysuvajit.workers.dev/logo.svg">
+
+	<!-- Additional SEO -->
+	<meta name="application-name" content="SumTube">
+	<meta name="msapplication-TileColor" content="#667eea">
+	<meta name="msapplication-config" content="/browserconfig.xml">
+
+	<!-- JSON-LD Structured Data -->
+	<script type="application/ld+json">
+	{
+		"@context": "https://schema.org",
+		"@type": "SoftwareApplication",
+		"name": "SumTube",
+		"description": "AI-powered Discord bot that automatically summarizes YouTube videos with intelligent analysis and timestamps",
+		"url": "https://sumtube.heysuvajit.workers.dev/",
+		"logo": "https://sumtube.heysuvajit.workers.dev/logo.svg",
+		"applicationCategory": "UtilitiesApplication",
+		"operatingSystem": "Discord",
+		"offers": {
+			"@type": "Offer",
+			"price": "0",
+			"priceCurrency": "USD"
+		},
+		"author": {
+			"@type": "Organization",
+			"name": "SumTube"
+		},
+		"aggregateRating": {
+			"@type": "AggregateRating",
+			"ratingValue": "5",
+			"ratingCount": "1"
+		}
+	}
+	</script>
 	<style>
 		* {
 			margin: 0;
@@ -165,6 +256,21 @@
 			text-align: center;
 			margin-bottom: 3rem;
 			color: white;
+		}
+
+		.logo-container {
+			margin-bottom: 2rem;
+		}
+
+		.header-logo {
+			width: 120px;
+			height: 120px;
+			filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+			transition: transform 0.3s ease;
+		}
+
+		.header-logo:hover {
+			transform: scale(1.05);
 		}
 
 		.header h1 {
@@ -356,6 +462,11 @@
 				font-size: 2.5rem;
 			}
 
+			.header-logo {
+				width: 80px;
+				height: 80px;
+			}
+
 			.main-btn {
 				padding: 1.2rem 2rem;
 				font-size: 1.1rem;
@@ -390,7 +501,10 @@
 
 	<div class="container">
 		<div class="header">
-			<h1>📺 YouTube Summarizer Bot</h1>
+			<div class="logo-container">
+				<img src="/logo.svg" alt="SumTube Logo" class="header-logo">
+			</div>
+			<h1>📺 SumTube - YouTube Summarizer Bot</h1>
 			<p>Automatically summarize YouTube videos in Discord with AI</p>
 
 			<div class="main-cta">
