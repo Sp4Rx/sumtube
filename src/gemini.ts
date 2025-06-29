@@ -1,6 +1,6 @@
 import { GoogleGenAI, Content, Part } from '@google/genai';
 
-export const model = 'gemini-2.5-flash';
+export const model = 'gemini-2.5-pro-preview-05-06';
 
 /**
  * Summarize a YouTube video using Gemini 2.5 Flash API
